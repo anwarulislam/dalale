@@ -1,59 +1,73 @@
 #!/usr/bin/env node
 
 const chalk = require("chalk");
-const fs = require("fs");
+const program = require("commander");
+const minimist = require("minimist");
+const {
+  saveConfig,
+  setNewConfig,
+  replaceConfig,
+  showConfig,
+} = require("../lib/checkConfig");
 const { generate } = require("./../src/generate");
 
-const readline = require("readline").createInterface({
-  input: process.stdin,
-  output: process.stdout,
+program
+  .command("generate <describe>")
+  .description("Write down your imagination and hit enter")
+  .option(
+    "-h, --height <heightNumber>",
+    "Set the height of the image [256, 512, 1024] (default: 1024)"
+  )
+  .option(
+    "-w, --width <widthNumber>",
+    "Set the width of the image [256, 512, 1024] (default: 1024)"
+  )
+  .option(
+    "-n, --number <number>",
+    "Set the number of images to generate (default: 1)"
+  )
+  .action((value, options) => {
+    console.log(value, options);
+
+    if (minimist(process.argv.slice(3))._.length > 1) {
+      console.log(
+        chalk.yellow(
+          "\n Info: You provided more than one argument. The first one will be used as the image description, the rest are ignored."
+        )
+      );
+    }
+  });
+
+program
+  .command("setup")
+  .description("Setup your DALL-E 2 API key")
+  .option("-k, --key <keyString>", "Set your API key")
+  .option("-r, --reset", "Enter your API key")
+  .option("-i, --info", "Show current configuration")
+  .action((options) => {
+    if (Object.keys(options).length === 0) {
+      setNewConfig();
+    }
+    if (options.reset) {
+      replaceConfig();
+    } else if (options.key) {
+      saveConfig(options.key);
+    } else if (options.info) {
+      showConfig();
+    }
+  });
+
+// add some useful info on help
+program.on("--help", () => {
+  console.log();
+  console.log(
+    `  Run ${chalk.cyan(
+      `dalale <command> --help`
+    )} for detailed usage of given command.`
+  );
+  console.log();
 });
 
-function checkConfig(isNew = true) {
-  // if config file exists, return true
+program.commands.forEach((c) => c.on("--help", () => console.log()));
 
-  const isConfigExists = fs.existsSync("./config/config.json");
-
-  if (isConfigExists && !isNew) {
-    console.log(chalk.green("Setup is already done!\n"));
-    console.log("Run dalale info to see your current configuration\n");
-    process.exit(0);
-  }
-
-  if (isNew) {
-    console.log(
-      "Hi, to use this app you need to create a DALL-E 2 App and get your API key."
-    );
-    console.log("You can create an app here: https://openai.com/blog/dall-e/");
-    console.log("Then, enter your API key below.");
-  } else {
-    // change your API key
-    console.log(
-      "You can change your API key here: https://openai.com/blog/dall-e/"
-    );
-  }
-
-  readline.question("\nAPI key: ", (apiKey) => {
-    // create config file
-    console.log("\nConfiguring...");
-    fs.writeFileSync("./config/config.json", JSON.stringify({ apiKey }));
-    console.log(
-      chalk.green("Your configuration is done! You can now use the CLI")
-    );
-    readline.close();
-  });
-}
-
-// check if the command is "dalale setup" if yes then run checkConfig()
-
-if (process.argv[2] === "setup") {
-  checkConfig();
-
-  // if option -r then run checkConfig(false)
-
-  if (process.argv[3] === "-r") {
-    checkConfig(false);
-  }
-} else {
-  generate(process.argv[2]);
-}
+program.parse(process.argv);
