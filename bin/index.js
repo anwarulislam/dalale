@@ -9,7 +9,6 @@ const {
   replaceConfig,
   showConfig,
 } = require("../lib/checkConfig");
-const { generate, saveImageFromUrl } = require("./../src/generate");
 
 program
   .command("generate <describe>")
@@ -34,6 +33,8 @@ program
         )
       );
     }
+
+    const { generate } = require("./../src/generate");
 
     generate(value, options);
   });

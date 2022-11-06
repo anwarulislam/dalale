@@ -9,7 +9,14 @@ const apiKey = "";
 
 try {
   JSON.parse(fs.readFileSync("./config/config.json").toString());
-} catch (error) {}
+} catch (error) {
+  console.log(
+    chalk.red(
+      "Please run 'dalale setup' to set up your API key. You can get your API key from https://openai.com/\n"
+    )
+  );
+  process.exit(0);
+}
 
 const config = new Configuration({
   apiKey,
