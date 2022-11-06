@@ -3,13 +3,15 @@ const { Configuration, OpenAIApi } = require("openai");
 const fs = require("fs");
 const chalk = require("chalk");
 const request = require("request");
+const { store } = require("../config/config");
 
 // read config/config.json
-const apiKey = "";
+let apiKey = "";
 
 try {
-  JSON.parse(fs.readFileSync("./config/config.json").toString());
+  apiKey = store.get("apiKey");
 } catch (error) {
+  console.log(error);
   console.log(
     chalk.red(
       "Please run 'dalale setup' to set up your API key. You can get your API key from https://openai.com/\n"
@@ -67,7 +69,7 @@ const generate = async (
       size,
       n: Number.isInteger(+number) ? +number : 1,
     })
-    .then((res) => {
+    .then((result) => {
       if (result.data.data.length === 1) {
         saveImageFromUrl(result.data.data[0].url);
       } else {
