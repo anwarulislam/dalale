@@ -1,0 +1,42 @@
+{
+  "name": "dalal-e",
+  "version": "0.0.1",
+  "description": "Dalal-E is a CLI application wrapper for DALL-E 2 AI generated realisting image generator",
+  "main": "./bin/index.js",
+  "bin": {
+    "dalale": "./bin/index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anwarulislam/anwarulislam.github.io.git"
+  },
+  "keywords": [
+    "DALL",
+    "E",
+    "DALLE",
+    "Dalal-E",
+    "dalali",
+    "dalale",
+    "AI",
+    "image",
+    "generator",
+    "AI",
+    "image",
+    "generator",
+    "CLI"
+  ],
+  "author": "Anwarul Islam",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anwarulislam/anwarulislam.github.io/issues"
+  },
+  "homepage": "https://github.com/anwarulislam/anwarulislam.github.io#readme",
+  "dependencies": {
+    "boxen": "4.0",
+    "chalk": "2.4",
+    "openai": "^3.1.0"
+  }
+}
