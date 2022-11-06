@@ -9,26 +9,24 @@ const {
   replaceConfig,
   showConfig,
 } = require("../lib/checkConfig");
-const { generate } = require("./../src/generate");
+const { generate, saveImageFromUrl } = require("./../src/generate");
 
 program
   .command("generate <describe>")
   .description("Write down your imagination and hit enter")
   .option(
-    "-h, --height <heightNumber>",
-    "Set the height of the image [256, 512, 1024] (default: 1024)"
+    "-h, --height <height>",
+    "Set the height of the image in px [256, 512, 1024] (default: 1024)"
   )
   .option(
-    "-w, --width <widthNumber>",
-    "Set the width of the image [256, 512, 1024] (default: 1024)"
+    "-w, --width <width>",
+    "Set the width of the image in px [256, 512, 1024] (default: 1024)"
   )
   .option(
     "-n, --number <number>",
-    "Set the number of images to generate (default: 1)"
+    "Set the number of images to generate (default: 1). Max: 4 at a time"
   )
   .action((value, options) => {
-    console.log(value, options);
-
     if (minimist(process.argv.slice(3))._.length > 1) {
       console.log(
         chalk.yellow(
@@ -36,6 +34,8 @@ program
         )
       );
     }
+
+    generate(value, options);
   });
 
 program
