@@ -33,7 +33,7 @@ To setup Dalal-E just run the command `dalale setup`. It will prompt you to ente
 
 The specificity is as follows:
 
-- `dalale setup --key AKSFOIE452312SKDFJ` to set API key directly.
+- `dalale setup --key <your-key>` to set API key directly.
 - `dalale setup --reset` to reset/replace the current API key.
 - `dalale setup --info` to get the current API key.
 
